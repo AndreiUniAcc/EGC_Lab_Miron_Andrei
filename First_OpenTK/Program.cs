@@ -26,6 +26,22 @@ namespace First_OpenTK
                     this.WindowState = WindowState.Normal;
                 else
                     this.WindowState = WindowState.Fullscreen;
+
+            if (e.Key == Key.Right)
+            {
+                GL.ClearColor(Color.DarkOliveGreen);
+            }
+            if (e.Key == Key.Left)
+            {
+                GL.ClearColor(Color.MidnightBlue);
+            }
+        }
+
+        void Mouse_KeyDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.IsPressed is true)
+                GL.ClearColor(Color.DarkOliveGreen);
+
         }
 
         protected override void OnLoad(EventArgs e)
@@ -37,7 +53,7 @@ namespace First_OpenTK
         {
             GL.Viewport(0, 0, Width, Height);
 
-            GL.MatrixMode(MatrixMode.Projection);
+            GL.MatrixMode(MatrixMode.Texture);
             GL.LoadIdentity();
             GL.Ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 4.0);
         }
@@ -61,6 +77,8 @@ namespace First_OpenTK
 
             this.SwapBuffers();
         }
+
+      
         [STAThread]
         static void Main(string[] args)
         {
