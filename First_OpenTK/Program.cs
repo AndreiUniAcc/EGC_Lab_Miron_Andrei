@@ -58,6 +58,13 @@ namespace First_OpenTK
             GL.Ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 4.0);
         }
 
+        void Mouse_Move(object sender, MouseEventArgs e)
+        {
+            if (Mouse[MouseButton.Left])
+                return;
+                
+        }
+
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
