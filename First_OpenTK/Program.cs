@@ -28,6 +28,11 @@ namespace First_OpenTK
                     this.WindowState = WindowState.Fullscreen;
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            GL.ClearColor(Color.MidnightBlue);
+        }
+
         protected override void OnResize(EventArgs e)
         {
             GL.Viewport(0, 0, Width, Height);
