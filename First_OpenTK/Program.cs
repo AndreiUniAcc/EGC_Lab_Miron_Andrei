@@ -64,14 +64,14 @@ namespace First_OpenTK
 
             GL.Begin(PrimitiveType.Triangles);
 
-            GL.Color3(Color.MidnightBlue);
-            GL.Vertex2(-1.0f, 1.0f);
+            GL.Color3(Color.Blue);
+            GL.Vertex2(-1.0f, -1.0f);
 
-            GL.Color3(Color.SpringGreen);
-            GL.Vertex2(0.0f, -1.0f);
+            GL.Color3(Color.Green);
+            GL.Vertex2(1.0f, -1.0f);
 
-            GL.Color3(Color.Ivory);
-            GL.Vertex2(1.0f, 1.0f);
+            GL.Color3(Color.Red);
+            GL.Vertex2(0f, 1.0f);
 
             GL.End();
 
