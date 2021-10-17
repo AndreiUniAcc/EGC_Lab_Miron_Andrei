@@ -62,7 +62,7 @@ namespace First_OpenTK
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            GL.Begin(PrimitiveType.Triangles);
+            GL.Begin(PrimitiveType.Quads);
 
             GL.Color3(Color.Blue);
             GL.Vertex2(-1.0f, -1.0f);
@@ -72,6 +72,11 @@ namespace First_OpenTK
 
             GL.Color3(Color.Red);
             GL.Vertex2(0f, 1.0f);
+
+
+            GL.Color3(Color.White);
+            GL.Vertex2(-0.8f, 0.4f);
+
 
             GL.End();
 
