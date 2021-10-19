@@ -4,6 +4,12 @@ using OpenTK.Input;
 using System;
 using System.Drawing;
 
+/// <summary>
+/// AM IMPLEMENTAT ACTIUNE LA MISCAREA SI ACTIONAREA MOUSE-ULUI IN ON UPDATE FRAME
+/// ACTIONAREA CULORILOR PRIN SAGETILE DE LA TASTATURA IN METODA CHEMATA IN CONSTRUCTOR.
+/// </summary>
+
+
 namespace First_OpenTK
 {
     class SimpleWindow : GameWindow
@@ -37,13 +43,6 @@ namespace First_OpenTK
             }
         }
 
-        void Mouse_KeyDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.IsPressed is true)
-                GL.ClearColor(Color.DarkOliveGreen);
-
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             GL.ClearColor(Color.MidnightBlue);
@@ -53,19 +52,32 @@ namespace First_OpenTK
         {
             GL.Viewport(0, 0, Width, Height);
 
-            GL.MatrixMode(MatrixMode.Texture);
+            GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 4.0);
         }
 
-        void Mouse_Move(object sender, MouseEventArgs e)
+        protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            if (Mouse[MouseButton.Left])
-                return;
-                
+
+            MouseState mouse = Mouse.GetState();
+            if (mouse.IsAnyButtonDown)
+                Console.WriteLine(mouse.X + " " + mouse.Y);
+
+            if (mouse[MouseButton.Left])
+            {
+                GL.ClearColor(Color.Orange);
+            }
+            if (mouse[MouseButton.Right])
+            {
+                GL.ClearColor(Color.MidnightBlue);
+            }
+
+            
+
         }
 
-        protected override void OnUpdateFrame(FrameEventArgs e)
+        protected override void OnRenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -90,7 +102,8 @@ namespace First_OpenTK
             this.SwapBuffers();
         }
 
-      
+
+
         [STAThread]
         static void Main(string[] args)
         {
