@@ -4,10 +4,7 @@ using OpenTK.Input;
 using System;
 using System.Drawing;
 
-/// <summary>
-/// AM IMPLEMENTAT ACTIUNE LA MISCAREA SI ACTIONAREA MOUSE-ULUI IN ON UPDATE FRAME
-/// ACTIONAREA CULORILOR PRIN SAGETILE DE LA TASTATURA IN METODA CHEMATA IN CONSTRUCTOR.
-/// </summary>
+
 
 
 namespace First_OpenTK
