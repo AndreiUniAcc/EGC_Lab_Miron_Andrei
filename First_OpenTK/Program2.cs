@@ -52,9 +52,10 @@ namespace First_OpenTK
         {
             GL.Viewport(0, 0, Width, Height);
 
+            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)(Width/(double)Height), 1, 64);
             GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-            GL.Ortho(-1.0, 1.0, -1.0, 1.0, 0.0, 4.0);
+            GL.LoadMatrix(ref perspective);
+            GL.Ortho(10, 10, 10, 10, 1, 64);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -79,22 +80,31 @@ namespace First_OpenTK
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            base.OnRenderFrame(e);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            Matrix4 lookat = Matrix4.LookAt(15, 50, 15, 0, 0, 0, 0, 1, 0);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadMatrix(ref lookat);
+
+
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.Begin(PrimitiveType.Quads);
 
             GL.Color3(Color.Blue);
-            GL.Vertex2(-1.0f, -1.0f);
+            GL.Vertex2(-3.0f, -3.0f);
 
             GL.Color3(Color.Green);
-            GL.Vertex2(1.0f, -1.0f);
+            GL.Vertex2(3.0f, -3.0f);
 
             GL.Color3(Color.Red);
-            GL.Vertex2(0f, 1.0f);
+            GL.Vertex2(0f, 6.0f);
 
 
             GL.Color3(Color.White);
-            GL.Vertex2(-0.8f, 0.4f);
+            GL.Vertex2(-2.8f, 2.4f);
 
 
             GL.End();
@@ -102,6 +112,50 @@ namespace First_OpenTK
             this.SwapBuffers();
         }
 
+
+        private void DrawCube()
+        {
+            GL.Begin(PrimitiveType.Quads);
+
+            GL.Color3(Color.Silver);
+            GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            GL.Vertex3(1.0f, 1.0f, -1.0f);
+            GL.Vertex3(1.0f, -1.0f, -1.0f);
+
+            GL.Color3(Color.Honeydew);
+            GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            GL.Vertex3(1.0f, -1.0f, -1.0f);
+            GL.Vertex3(1.0f, -1.0f, 1.0f);
+            GL.Vertex3(-1.0f, -1.0f, 1.0f);
+
+            GL.Color3(Color.Moccasin);
+
+            GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            GL.Vertex3(-1.0f, 1.0f, -1.0f);
+
+            GL.Color3(Color.IndianRed);
+            GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            GL.Vertex3(1.0f, -1.0f, 1.0f);
+            GL.Vertex3(1.0f, 1.0f, 1.0f);
+            GL.Vertex3(-1.0f, 1.0f, 1.0f);
+
+            GL.Color3(Color.PaleVioletRed);
+            GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            GL.Vertex3(1.0f, 1.0f, 1.0f);
+            GL.Vertex3(1.0f, 1.0f, -1.0f);
+
+            GL.Color3(Color.ForestGreen);
+            GL.Vertex3(1.0f, -1.0f, -1.0f);
+            GL.Vertex3(1.0f, 1.0f, -1.0f);
+            GL.Vertex3(1.0f, 1.0f, 1.0f);
+            GL.Vertex3(1.0f, -1.0f, 1.0f);
+
+            GL.End();
+        }
 
 
         [STAThread]
