@@ -10,7 +10,7 @@ using System.Drawing;
 /// </summary>
 
 
-namespace First_OpenTK2
+namespace First_OpenTK3
 {
     class SimpleWindow : GameWindow
     {
