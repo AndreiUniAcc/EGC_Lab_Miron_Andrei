@@ -4,6 +4,7 @@ using OpenTK.Input;
 using System;
 using System.Drawing;
 
+
 /// <summary>
 /// In constructor m-am jucat cu vsync
 /// Draw1 si Draw2 sunt 2 functii cu care pot desena 2 obiecte separate
@@ -12,21 +13,22 @@ using System.Drawing;
 /// In onRenderFrame am facut sa se miste formele.
 /// </summary>
 
-
 namespace First_OpenTK
 {
     class SimpleWindow : GameWindow
     {
-
+        double lastMousePos;
         const float rotationSpeed = 100.0f;
         float angle;
         bool showCube = false, moveLeft = false, moveRight = false;
         bool moveUp = false, moveDown = false;
+    
 
         // Constructor.
         public SimpleWindow() : base(800, 600)
         {
             VSync = VSyncMode.On;
+            lastMousePos = 0;
         }
 
         void KeyBoard_KeyDown(object sender, KeyboardKeyEventArgs e)
@@ -90,9 +92,37 @@ namespace First_OpenTK
             KeyDown += KeyBoard_KeyDown;
             MouseState mouse = Mouse.GetState();
 
+            double  actualMousePos = mouse.Y;
+       
+            // aici fac rotatia obiectului doar in timpul miscarii mouseului
+            // idee venita dupa ce m-am uitat la clasa mouseMoveEventArgs si nu am inteles cum 
+            // sa o folosesc aici asa ca am implementat o varianta rudimentara.
+
+            if (actualMousePos > lastMousePos)
+            { 
+                moveDown = true;
+                moveUp = false; 
+            }
+            else
+            if(actualMousePos < lastMousePos) {
+                moveDown = false;
+                moveUp = true;
+            }else
+            {
+                moveDown = false;
+                moveUp = false;
+            }
+            lastMousePos = actualMousePos;
+
+
             if (mouse.IsAnyButtonDown)
-                Console.WriteLine(mouse.X + " " + mouse.Y);
-            if (mouse.Y > 0) 
+            Console.WriteLine(mouse.X + " " + mouse.Y);
+
+
+
+            // ce e comentat mai jos invarte obiectul constant  sus sau jos nu se opreste niciodata.
+
+           /* if (mouse.Y > 0) 
             {
                 moveUp = true;
                 moveDown = false;
@@ -103,7 +133,7 @@ namespace First_OpenTK
                 moveDown = true;
 
             }
-
+           */
 
 
             if (mouse[MouseButton.Left])
@@ -142,11 +172,11 @@ namespace First_OpenTK
                     GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
                 if (moveRight is true)
                     GL.Rotate(angle, 0.0f, -1.0f, 0.0f);
-                //if (moveUp is true)
-                //    GL.Rotate(angle, 1.0f, 0.0f, 0.0f);
-                //if (moveDown is true)
-                //    GL.Rotate(angle, -1.0f, 0.0f, 0.0f);
-               // Draw2();
+                if (moveUp is true)
+                    GL.Rotate(angle, 1.0f, 0.0f, 0.0f);
+                if (moveDown is true)
+                    GL.Rotate(angle, -1.0f, 0.0f, 0.0f);
+                Draw2();
                 Draw();
                
             }
