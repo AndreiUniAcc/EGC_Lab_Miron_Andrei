@@ -22,7 +22,9 @@ namespace First_OpenTK
         float angle;
         bool showCube = false, moveLeft = false, moveRight = false;
         bool moveUp = false, moveDown = false;
-    
+        bool whiteCube = false, mouseClick = false;
+        KeyboardState lastKeyPress;
+
 
         // Constructor.
         public SimpleWindow() : base(800, 600)
@@ -33,25 +35,61 @@ namespace First_OpenTK
 
         void KeyBoard_KeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            KeyboardState keyboard = Keyboard.GetState();
+            MouseState mouse = Mouse.GetState();
+
+
+            double actualMousePos = mouse.Y;
+
+            // aici fac rotatia obiectului doar in timpul miscarii mouseului
+            // idee venita dupa ce m-am uitat la clasa mouseMoveEventArgs si nu am inteles cum 
+            // sa o folosesc aici asa ca am implementat o varianta rudimentara.
+
+            if (actualMousePos > lastMousePos)
+            {
+                moveDown = true;
+                moveUp = false;
+            }
+            else
+            if (actualMousePos < lastMousePos)
+            {
+                moveDown = false;
+                moveUp = true;
+            }
+            else
+            {
+                moveDown = false;
+                moveUp = false;
+            }
+
+            if (mouse[MouseButton.Left])
+            {
+                if (mouseClick)
+                    mouseClick = false;
+                else
+                    mouseClick = true;
+            }
+                if (keyboard[Key.Escape] && !keyboard.Equals(lastKeyPress))
             {
                 this.Exit();
             }
 
-            if (e.Key == Key.F11)
+            if (keyboard[Key.F11] && !keyboard.Equals(lastKeyPress))
+            {
                 if (this.WindowState == WindowState.Fullscreen)
                     this.WindowState = WindowState.Normal;
                 else
                     this.WindowState = WindowState.Fullscreen;
+            }
 
-            if (e.Key == Key.Right)
+            if (keyboard[Key.Right] && !keyboard.Equals(lastKeyPress))
             {
                 moveRight = true;
                 moveLeft = false;
                 moveDown = false;
                 moveUp = false;
             }
-            if (e.Key == Key.Left)
+            if (keyboard[Key.Left] && !keyboard.Equals(lastKeyPress))
             {
                 moveLeft = true;
                 moveRight = false;
@@ -59,15 +97,24 @@ namespace First_OpenTK
                 moveDown = false;
             }
 
-            if(e.Key == Key.E)
-                if (showCube == true)
-                {
+            if (keyboard[Key.E] && !keyboard.Equals(lastKeyPress))
+            {
+                if (showCube)
                     showCube = false;
-                }
                 else
-                {
                     showCube = true;
-                }
+            }
+
+            if (keyboard[Key.Number1] && !keyboard.Equals(lastKeyPress))
+            {
+                if (whiteCube)
+                    whiteCube = false;
+                else
+                    whiteCube = true;
+            }
+
+            lastMousePos = actualMousePos;
+            lastKeyPress = keyboard;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -88,54 +135,13 @@ namespace First_OpenTK
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
-
-            KeyDown += KeyBoard_KeyDown;
             MouseState mouse = Mouse.GetState();
+            KeyDown += KeyBoard_KeyDown;
 
-            double  actualMousePos = mouse.Y;
-       
-            // aici fac rotatia obiectului doar in timpul miscarii mouseului
-            // idee venita dupa ce m-am uitat la clasa mouseMoveEventArgs si nu am inteles cum 
-            // sa o folosesc aici asa ca am implementat o varianta rudimentara.
-
-            if (actualMousePos > lastMousePos)
-            { 
-                moveDown = true;
-                moveUp = false; 
-            }
-            else
-            if(actualMousePos < lastMousePos) {
-                moveDown = false;
-                moveUp = true;
-            }else
+            if (mouseClick)
             {
-                moveDown = false;
-                moveUp = false;
+                Console.WriteLine(mouse.X + " " + mouse.Y);
             }
-            lastMousePos = actualMousePos;
-
-
-            if (mouse.IsAnyButtonDown)
-            Console.WriteLine(mouse.X + " " + mouse.Y);
-
-
-
-            // ce e comentat mai jos invarte obiectul constant  sus sau jos nu se opreste niciodata.
-
-           /* if (mouse.Y > 0) 
-            {
-                moveUp = true;
-                moveDown = false;
-            }
-            else
-            {
-                moveUp = false;
-                moveDown = true;
-
-            }
-           */
-
-
             if (mouse[MouseButton.Left])
             {
                 GL.ClearColor(Color.Orange);
@@ -144,16 +150,14 @@ namespace First_OpenTK
             {
                 GL.ClearColor(Color.MidnightBlue);
             }
-
-
-
-            
-
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+
+            
+
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             Matrix4 lookat = Matrix4.LookAt(0, 5, 10, 
@@ -167,7 +171,7 @@ namespace First_OpenTK
 
             if (showCube == true)
             {
-                angle += rotationSpeed * (float)e.Time;
+                /*angle += rotationSpeed * (float)e.Time;
                 if(moveLeft is true)
                     GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
                 if (moveRight is true)
@@ -175,52 +179,78 @@ namespace First_OpenTK
                 if (moveUp is true)
                     GL.Rotate(angle, 1.0f, 0.0f, 0.0f);
                 if (moveDown is true)
-                    GL.Rotate(angle, -1.0f, 0.0f, 0.0f);
-                Draw2();
-                Draw();
-               
+                    GL.Rotate(angle, -1.0f, 0.0f, 0.0f);*/
+                //Draw2ndCube();
+                /*DrawCube(Color.Red,
+                            Color.Honeydew,
+                            Color.Moccasin,
+                            Color.IndianRed,
+                            Color.PaleVioletRed,
+                            Color.ForestGreen);
+                */
+                if(whiteCube)
+                    DrawCube(Color.White,
+                            Color.White,
+                            Color.White,
+                            Color.White,
+                            Color.White,
+                            Color.White);
+                else
+                    DrawCube(Color.Red,
+                            Color.Honeydew,
+                            Color.Moccasin,
+                            Color.IndianRed,
+                            Color.PaleVioletRed,
+                            Color.ForestGreen);
+
+
+
+                
+
             }
+
+
 
             this.SwapBuffers();
         }
 
 
-        private void Draw()
+        private void DrawCube(Color culoare1, Color culoare2, Color culoare3, Color culoare4, Color culoare5, Color culoare6)
         {
             GL.Begin(PrimitiveType.Quads);
 
-            GL.Color3(Color.Silver);
+            GL.Color3(culoare1);
             GL.Vertex3(-1.0f, -1.0f, -1.0f);
             GL.Vertex3(-1.0f, 1.0f, -1.0f);
             GL.Vertex3(1.0f, 1.0f, -1.0f);
             GL.Vertex3(1.0f, -1.0f, -1.0f);
 
-            GL.Color3(Color.Honeydew);
+            GL.Color3(culoare2);
             GL.Vertex3(-1.0f, -1.0f, -1.0f);
             GL.Vertex3(1.0f, -1.0f, -1.0f);
             GL.Vertex3(1.0f, -1.0f, 1.0f);
             GL.Vertex3(-1.0f, -1.0f, 1.0f);
 
-            GL.Color3(Color.Moccasin);
+            GL.Color3(culoare3);
 
             GL.Vertex3(-1.0f, -1.0f, -1.0f);
             GL.Vertex3(-1.0f, -1.0f, 1.0f);
             GL.Vertex3(-1.0f, 1.0f, 1.0f);
             GL.Vertex3(-1.0f, 1.0f, -1.0f);
 
-            GL.Color3(Color.IndianRed);
+            GL.Color3(culoare4);
             GL.Vertex3(-1.0f, -1.0f, 1.0f);
             GL.Vertex3(1.0f, -1.0f, 1.0f);
             GL.Vertex3(1.0f, 1.0f, 1.0f);
             GL.Vertex3(-1.0f, 1.0f, 1.0f);
 
-            GL.Color3(Color.PaleVioletRed);
+            GL.Color3(culoare5);
             GL.Vertex3(-1.0f, 1.0f, -1.0f);
             GL.Vertex3(-1.0f, 1.0f, 1.0f);
             GL.Vertex3(1.0f, 1.0f, 1.0f);
             GL.Vertex3(1.0f, 1.0f, -1.0f);
 
-            GL.Color3(Color.ForestGreen);
+            GL.Color3(culoare6);
             GL.Vertex3(1.0f, -1.0f, -1.0f);
             GL.Vertex3(1.0f, 1.0f, -1.0f);
             GL.Vertex3(1.0f, 1.0f, 1.0f);
@@ -229,7 +259,10 @@ namespace First_OpenTK
             GL.End();
         }
 
-        private void Draw2()
+
+
+
+        private void Draw2ndCube()
         {
             GL.Begin(PrimitiveType.Quads);
 
