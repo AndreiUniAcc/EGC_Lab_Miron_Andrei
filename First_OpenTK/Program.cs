@@ -1,8 +1,10 @@
-﻿using OpenTK;
+﻿using System;
+using System.Drawing;
+using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using System;
-using System.Drawing;
+
 
 
 /// <summary>
@@ -18,20 +20,82 @@ namespace First_OpenTK
     class SimpleWindow : GameWindow
     {
         double lastMousePos;
-        const float rotationSpeed = 100.0f;
-        float angle;
-        bool showCube = false, moveLeft = false, moveRight = false;
-        bool moveUp = false, moveDown = false;
-        bool whiteCube = false, mouseClick = false;
+        bool moveLeft = false, moveRight = false, moveUp = false, moveDown = false;
+        bool mouseClick = false;
         KeyboardState lastKeyPress;
 
 
+        Cube cub;
+
+
         // Constructor.
-        public SimpleWindow() : base(800, 600)
+        public SimpleWindow() : base(800, 600, new GraphicsMode(32, 24, 0, 8))
         {
             VSync = VSyncMode.On;
             lastMousePos = 0;
         }
+
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            GL.ClearColor(Color.MidnightBlue);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
+
+            cub = new Cube();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            GL.Viewport(0, 0, Width, Height);
+
+            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)(Width / (double)Height), 1, 64);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadMatrix(ref perspective);
+
+            Matrix4 lookat = Matrix4.LookAt(0, 5, 20, 0, 0, 0, 0, 1, 0);
+            GL.MatrixMode(MatrixMode.Modelview);
+
+            GL.LoadMatrix(ref lookat);
+        }
+
+        protected override void OnUpdateFrame(FrameEventArgs e)
+        {
+            base.OnUpdateFrame(e);
+
+            MouseState mouse = Mouse.GetState();
+            KeyDown += KeyBoard_KeyDown;
+
+            if (mouseClick)
+            {
+                Console.WriteLine(mouse.X + " " + mouse.Y);
+                Console.WriteLine("Pixel Color: " + IntPtr.Size);
+                Console.WriteLine(" ");
+            }
+            if (mouse[MouseButton.Left])
+            {
+                GL.ClearColor(Color.Orange);
+            }
+            if (mouse[MouseButton.Right])
+            {
+                GL.ClearColor(Color.MidnightBlue);
+            }
+        }
+
+
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            base.OnRenderFrame(e);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            cub.DrawCube();
+            cub.CubeRotation(e, moveLeft, moveRight, moveUp, moveDown);
+
+            SwapBuffers();
+        }
+
 
         void KeyBoard_KeyDown(object sender, KeyboardKeyEventArgs e)
         {
@@ -69,7 +133,7 @@ namespace First_OpenTK
                 else
                     mouseClick = true;
             }
-                if (keyboard[Key.Escape] && !keyboard.Equals(lastKeyPress))
+            if (keyboard[Key.Escape] && !keyboard.Equals(lastKeyPress))
             {
                 this.Exit();
             }
@@ -97,213 +161,13 @@ namespace First_OpenTK
                 moveDown = false;
             }
 
-            if (keyboard[Key.E] && !keyboard.Equals(lastKeyPress))
+            if (keyboard[Key.L] && !keyboard.Equals(lastKeyPress))
             {
-                if (showCube)
-                    showCube = false;
-                else
-                    showCube = true;
-            }
-
-            if (keyboard[Key.Number1] && !keyboard.Equals(lastKeyPress))
-            {
-                if (whiteCube)
-                    whiteCube = false;
-                else
-                    whiteCube = true;
+                cub.ToggleVisibility();
             }
 
             lastMousePos = actualMousePos;
             lastKeyPress = keyboard;
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            GL.ClearColor(Color.MidnightBlue);
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            GL.Viewport(0, 0, Width, Height);
-
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)(Width / (double)Height), 1, 64);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref perspective);
-        }
-
-        protected override void OnUpdateFrame(FrameEventArgs e)
-        {
-            base.OnUpdateFrame(e);
-            MouseState mouse = Mouse.GetState();
-            KeyDown += KeyBoard_KeyDown;
-
-            if (mouseClick)
-            {
-                Console.WriteLine(mouse.X + " " + mouse.Y);
-            }
-            if (mouse[MouseButton.Left])
-            {
-                GL.ClearColor(Color.Orange);
-            }
-            if (mouse[MouseButton.Right])
-            {
-                GL.ClearColor(Color.MidnightBlue);
-            }
-        }
-
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            base.OnRenderFrame(e);
-
-            
-
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-
-            Matrix4 lookat = Matrix4.LookAt(0, 5, 10, 
-                                            0, 0, 0,
-                                            0, 1, 0);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookat);
-
-
-            
-
-            if (showCube == true)
-            {
-                /*angle += rotationSpeed * (float)e.Time;
-                if(moveLeft is true)
-                    GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
-                if (moveRight is true)
-                    GL.Rotate(angle, 0.0f, -1.0f, 0.0f);
-                if (moveUp is true)
-                    GL.Rotate(angle, 1.0f, 0.0f, 0.0f);
-                if (moveDown is true)
-                    GL.Rotate(angle, -1.0f, 0.0f, 0.0f);*/
-                //Draw2ndCube();
-                /*DrawCube(Color.Red,
-                            Color.Honeydew,
-                            Color.Moccasin,
-                            Color.IndianRed,
-                            Color.PaleVioletRed,
-                            Color.ForestGreen);
-                */
-                if(whiteCube)
-                    DrawCube(Color.White,
-                            Color.White,
-                            Color.White,
-                            Color.White,
-                            Color.White,
-                            Color.White);
-                else
-                    DrawCube(Color.Red,
-                            Color.Honeydew,
-                            Color.Moccasin,
-                            Color.IndianRed,
-                            Color.PaleVioletRed,
-                            Color.ForestGreen);
-
-
-
-                
-
-            }
-
-
-
-            this.SwapBuffers();
-        }
-
-
-        private void DrawCube(Color culoare1, Color culoare2, Color culoare3, Color culoare4, Color culoare5, Color culoare6)
-        {
-            GL.Begin(PrimitiveType.Quads);
-
-            GL.Color3(culoare1);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-
-            GL.Color3(culoare2);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-
-            GL.Color3(culoare3);
-
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-
-            GL.Color3(culoare4);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-
-            GL.Color3(culoare5);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-
-            GL.Color3(culoare6);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-
-            GL.End();
-        }
-
-
-
-
-        private void Draw2ndCube()
-        {
-            GL.Begin(PrimitiveType.Quads);
-
-            GL.Color3(Color.Silver);
-            GL.Vertex3(-2.0f, -0.0f, -2.0f);
-            GL.Vertex3(-2.0f, 4.0f, -2.0f);
-            GL.Vertex3(2.0f, 4.0f, -2.0f);
-            GL.Vertex3(2.0f, -0.0f, -2.0f);
-
-            GL.Color3(Color.Honeydew);
-            GL.Vertex3(-2.0f, -0.0f, -2.0f);
-            GL.Vertex3(2.0f, -0.0f, -2.0f);
-            GL.Vertex3(2.0f, -0.0f, 2.0f);
-            GL.Vertex3(-2.0f, -0.0f, 2.0f);
-
-
-            GL.Color3(Color.Moccasin);
-            GL.Vertex3(-2.0f, -0.0f, -2.0f);
-            GL.Vertex3(-2.0f, -0.0f, 2.0f);
-            GL.Vertex3(-2.0f, 4.0f, 2.0f);
-            GL.Vertex3(-2.0f, 4.0f, -2.0f);
-
-            GL.Color3(Color.IndianRed);
-            GL.Vertex3(-2.0f, -0.0f, 2.0f);
-            GL.Vertex3(2.0f, -0.0f, 2.0f);
-            GL.Vertex3(2.0f, 4.0f, 2.0f);
-            GL.Vertex3(-2.0f, 4.0f, 2.0f);
-
-            GL.Color3(Color.PaleVioletRed);
-            GL.Vertex3(-2.0f, 4.0f, -2.0f);
-            GL.Vertex3(-2.0f, 4.0f, 2.0f);
-            GL.Vertex3(2.0f, 4.0f, 2.0f);
-            GL.Vertex3(2.0f, 4.0f, -2.0f);
-
-            GL.Color3(Color.ForestGreen);
-            GL.Vertex3(2.0f, -0.0f, -2.0f);
-            GL.Vertex3(2.0f, 4.0f, -2.0f);
-            GL.Vertex3(2.0f, 4.0f, 2.0f);
-            GL.Vertex3(2.0f, -0.0f, 2.0f);
-
-            GL.End();
         }
 
 

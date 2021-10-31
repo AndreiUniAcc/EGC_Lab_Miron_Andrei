@@ -52,5 +52,10 @@ namespace First_OpenTK
             coordX = z;
         }
 
+        public Color GetColor() { return this.pointColor; }
+        public int GetX() { return this.coordX; }
+        public int GetY() { return this.coordY; }
+        public int GetZ() { return this.coordZ; }
+
     }
 }
