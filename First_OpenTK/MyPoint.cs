@@ -9,8 +9,9 @@ namespace First_OpenTK
         private int coordY;
         private int coordZ;
         private Color pointColor;
-        private Color4 randomPointColor;
+        private Color randomColor;
 
+        // Default Constructor
         public MyPoint()
         {
             this.coordX = 0;
@@ -18,6 +19,8 @@ namespace First_OpenTK
             this.coordZ = 0;
             this.pointColor = Color.Black;
         }
+        
+        // Constructor cu tip culoare Color
         public MyPoint(int x, int y, int z, Color pColor)
         {
             this.coordX = x;
@@ -25,13 +28,8 @@ namespace First_OpenTK
             this.coordZ = z;
             this.pointColor = pColor;
         }
-        public MyPoint(int x, int y, int z, Color4 pColor)
-        {
-            this.coordX = x;
-            this.coordY = y;
-            this.coordZ = z;
-            this.randomPointColor = pColor;
-        }
+
+        // No color Constructor
         public MyPoint(int x, int y, int z)
         {
             this.coordX = x;
@@ -43,6 +41,11 @@ namespace First_OpenTK
         public void SetColor(Color pColor)
         {
             pointColor = pColor;
+        }
+
+        public void SetRandomColor(Color pColor)
+        {
+            randomColor = pColor;
         }
 
         public void SetX(int x)
@@ -61,6 +64,7 @@ namespace First_OpenTK
         }
 
         public Color GetColor() { return this.pointColor; }
+        public Color GetRandomColor() { return this.randomColor; }
         public int GetX() { return this.coordX; }
         public int GetY() { return this.coordY; }
         public int GetZ() { return this.coordZ; }

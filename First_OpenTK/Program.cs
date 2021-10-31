@@ -6,13 +6,16 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
 
-
 /// <summary>
-/// In constructor m-am jucat cu vsync
-/// Draw1 si Draw2 sunt 2 functii cu care pot desena 2 obiecte separate
-/// In KeyBoard_KeyDown verific tastele apasate de la tastatura si schimb valorile de bool pt a crea rotatii.
-/// In onUpdateFrame am implementat comenzile pt mouse
-/// In onRenderFrame am facut sa se miste formele.
+/// INSTRUCTIUNI BUTOANE
+/// 1 - ACTIVEAZA AFISAREA DE CULORI RANDOM A CUBULUI
+/// 2 - ACTIVEAZA AFISAREA CULORILOR HARDCODED A CUBULUI
+/// 3 - SCHIMBA CULORILE RANDOM PENTRU AFISAREA 1
+/// L - VISION TOGGLE PENTRU CUB
+/// MOUSE_LEFT_CLICK - SCHIMBA CULOARE FUNDAL PORTOCALIU
+/// MOUSE_RIGHT_CLICK - SCHIMBA CULOARE FUNDAL ALBASTRU
+/// LEFT_ARROW - ROTIRE CUB SPRE STANGA
+/// RIGHT_ARROW - ROTIRE CUB SPRE DREAPTA
 /// </summary>
 
 namespace First_OpenTK
@@ -43,7 +46,7 @@ namespace First_OpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
 
-            cub = new Cube(pickRandomCubeColors);
+            cub = new Cube();
         }
 
         protected override void OnResize(EventArgs e)
@@ -69,8 +72,8 @@ namespace First_OpenTK
 
             if (mouseClick)
             {
-                Console.WriteLine(mouse.X + " " + mouse.Y);
-                Console.WriteLine("Pixel Color: " + IntPtr.Size);
+                //Console.WriteLine(mouse.X + " " + mouse.Y);
+                //Console.WriteLine("Pixel Color: " + IntPtr.Size);
                 Console.WriteLine(" ");
             }
             if (mouse[MouseButton.Left])
@@ -90,7 +93,7 @@ namespace First_OpenTK
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 
-            cub.DrawCube();
+            cub.DrawCube(pickRandomCubeColors);
             cub.CubeRotation(e, moveLeft, moveRight, moveUp, moveDown);
 
             SwapBuffers();
@@ -138,15 +141,6 @@ namespace First_OpenTK
                 this.Exit();
             }
 
-            if (keyboard[Key.Number1] && !keyboard.Equals(lastKeyPress))
-            {
-                pickRandomCubeColors = true;
-            }
-            if (keyboard[Key.Number2] && !keyboard.Equals(lastKeyPress))
-            {
-                pickRandomCubeColors = false;
-            }
-
             if (keyboard[Key.F11] && !keyboard.Equals(lastKeyPress))
             {
                 if (this.WindowState == WindowState.Fullscreen)
@@ -168,6 +162,27 @@ namespace First_OpenTK
                 moveRight = false;
                 moveUp = false;
                 moveDown = false;
+            }
+
+            if (keyboard[Key.Left] && keyboard[Key.Right] && !keyboard.Equals(lastKeyPress))
+            {
+                moveLeft = false;
+                moveRight = false;
+                moveUp = false;
+                moveDown = false;
+            }
+
+            if (keyboard[Key.Number1] && !keyboard.Equals(lastKeyPress))
+            {
+                pickRandomCubeColors = true;
+            }
+            if (keyboard[Key.Number2] && !keyboard.Equals(lastKeyPress))
+            {
+                pickRandomCubeColors = false;
+            }
+            if (keyboard[Key.Number3])
+            {
+                cub.SetRandomColorList();
             }
 
             if (keyboard[Key.L] && !keyboard.Equals(lastKeyPress))

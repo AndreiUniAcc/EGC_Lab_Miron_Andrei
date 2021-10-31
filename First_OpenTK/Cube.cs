@@ -14,7 +14,11 @@ namespace First_OpenTK
         private float angle;
         private const float rotationSpeed = 10.0f;
         private bool isRotating = false;
+        private Color[] randomColorsList = new Color[8];
         //private readonly int OFFSET = 1;
+
+        
+
 
         public bool IsDrawable { get; set; }
 
@@ -37,11 +41,9 @@ namespace First_OpenTK
         }
 
         // Constructor
-        public Cube(bool pickRandomColors)
+        public Cube()
         {
-            IsDrawable = true;
-            if (pickRandomColors == false)
-            {
+                IsDrawable = true;
                 A = new MyPoint(1, 1, -1, Color.Green);
                 B = new MyPoint(1, 1, 1, Color.Blue);
                 C = new MyPoint(-1, 1, 1, Color.Black);
@@ -51,40 +53,91 @@ namespace First_OpenTK
                 F = new MyPoint(1, -1, 1, Color.Blue);
                 G = new MyPoint(-1, -1, 1, Color.Black);
                 H = new MyPoint(-1, -1, -1, Color.Red);
-
-            }
-            else
-            {
-                Color4[] randomColors = new Color4[8];
-                var rand = new Random();
-                for (int i = 0; i < 8; i++)
-                {
-                    randomColors[i] = new Color4((float)rand.Next(0, 255), (float)rand.Next(0, 255), (float)rand.Next(0, 255), 1.0f);
-                }
-                A = new MyPoint(1, 1, -1, randomColors[0]);
-                B = new MyPoint(1, 1, 1, randomColors[1]);
-                C = new MyPoint(-1, 1, 1, randomColors[2]);
-                D = new MyPoint(-1, 1, -1, randomColors[3]);
-
-                E = new MyPoint(1, -1, -1, randomColors[4]);
-                F = new MyPoint(1, -1, 1, randomColors[5]);
-                G = new MyPoint(-1, -1, 1, randomColors[6]);
-                H = new MyPoint(-1, -1, -1, randomColors[7]);
-            }
-
         }
 
         // Deseneaza cub daca IsDrawable true.
-        public void DrawCube()
+        public void DrawCube(bool randomColors)
         {
+            // Stop drawing if cube not visible
             if(IsDrawable == false)
             {
                 return;
             }
+
+
+            // Draw with random colors or predefined
+            if (randomColors == true)
+            {
+                GL.Begin(PrimitiveType.Quads);
+
+                /// Fateta sus
+                GL.Color3(randomColorsList[0]);
+                GL.Vertex3(A.GetX(), A.GetY(), A.GetZ());
+                GL.Color3(randomColorsList[1]);
+                GL.Vertex3(B.GetX(), B.GetY(), B.GetZ());
+                GL.Color3(randomColorsList[2]);
+                GL.Vertex3(C.GetX(), C.GetY(), C.GetZ());
+                GL.Color3(randomColorsList[3]);
+                GL.Vertex3(D.GetX(), D.GetY(), D.GetZ());
+
+
+                /// Fateta dreapta
+                GL.Color3(randomColorsList[0]);
+                GL.Vertex3(A.GetX(), A.GetY(), A.GetZ());
+                GL.Color3(randomColorsList[1]);
+                GL.Vertex3(B.GetX(), B.GetY(), B.GetZ());
+                GL.Color3(randomColorsList[4]);
+                GL.Vertex3(E.GetX(), E.GetY(), E.GetZ());
+                GL.Color3(randomColorsList[5]);
+                GL.Vertex3(F.GetX(), F.GetY(), F.GetZ());
+
+                /// Fateta fata
+                GL.Color3(randomColorsList[1]);
+                GL.Vertex3(B.GetX(), B.GetY(), B.GetZ());
+                GL.Color3(randomColorsList[2]);
+                GL.Vertex3(C.GetX(), C.GetY(), C.GetZ());
+                GL.Color3(randomColorsList[5]);
+                GL.Vertex3(F.GetX(), F.GetY(), F.GetZ());
+                GL.Color3(randomColorsList[6]);
+                GL.Vertex3(G.GetX(), G.GetY(), G.GetZ());
+
+                /// Fateta stanga
+                GL.Color3(randomColorsList[2]);
+                GL.Vertex3(C.GetX(), C.GetY(), C.GetZ());
+                GL.Color3(randomColorsList[3]);
+                GL.Vertex3(D.GetX(), D.GetY(), D.GetZ());
+                GL.Color3(randomColorsList[6]);
+                GL.Vertex3(G.GetX(), G.GetY(), G.GetZ());
+                GL.Color3(randomColorsList[7]);
+                GL.Vertex3(H.GetX(), H.GetY(), H.GetZ());
+
+                /// Fateta spate 
+                GL.Color3(randomColorsList[0]);
+                GL.Vertex3(A.GetX(), A.GetY(), A.GetZ());
+                GL.Color3(randomColorsList[3]);
+                GL.Vertex3(D.GetX(), D.GetY(), D.GetZ());
+                GL.Color3(randomColorsList[4]);
+                GL.Vertex3(E.GetX(), E.GetY(), E.GetZ());
+                GL.Color3(randomColorsList[7]);
+                GL.Vertex3(H.GetX(), H.GetY(), H.GetZ());
+
+                /// Fateta jos
+                GL.Color3(randomColorsList[4]);
+                GL.Vertex3(E.GetX(), E.GetY(), E.GetZ());
+                GL.Color3(randomColorsList[5]);
+                GL.Vertex3(F.GetX(), F.GetY(), F.GetZ());
+                GL.Color3(randomColorsList[6]);
+                GL.Vertex3(G.GetX(), G.GetY(), G.GetZ());
+                GL.Color3(randomColorsList[7]);
+                GL.Vertex3(H.GetX(), H.GetY(), H.GetZ());
+
+                GL.End();
+
+            }
+            else
+            {
             GL.Begin(PrimitiveType.Quads);
 
-
-            /// Fateta sus
             GL.Color3(A.GetColor());
             GL.Vertex3(A.GetX(), A.GetY(), A.GetZ());
             GL.Color3(B.GetColor());
@@ -144,12 +197,31 @@ namespace First_OpenTK
             GL.Color3(H.GetColor());
             GL.Vertex3(H.GetX(), H.GetY(), H.GetZ());
 
-
-
-
             GL.End();
+
+            }
         }
 
+
+        // Generates a random set of colors for the cube.
+        public void SetRandomColorList()
+        {
+            var rand = new Random();
+            for (int i = 0; i < 8; i++)
+            {
+                randomColorsList[i] = new Color();
+                randomColorsList[i] = Color.FromArgb(255, rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+            }
+            A.SetRandomColor(randomColorsList[0]);
+            B.SetRandomColor(randomColorsList[1]);
+            C.SetRandomColor(randomColorsList[2]);
+            D.SetRandomColor(randomColorsList[3]);
+            E.SetRandomColor(randomColorsList[4]);
+            F.SetRandomColor(randomColorsList[5]);
+            G.SetRandomColor(randomColorsList[6]);
+            H.SetRandomColor(randomColorsList[7]);
+
+        }
 
         public void CubeRotation(FrameEventArgs e, bool left, bool right, bool up, bool down)
         {
@@ -174,5 +246,7 @@ namespace First_OpenTK
         }
 
 
+
+        
     }
 }
