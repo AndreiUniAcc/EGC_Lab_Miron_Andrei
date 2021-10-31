@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using OpenTK.Graphics;
+using System.Drawing;
 
 namespace First_OpenTK
 {
@@ -8,7 +9,7 @@ namespace First_OpenTK
         private int coordY;
         private int coordZ;
         private Color pointColor;
-
+        private Color4 randomPointColor;
 
         public MyPoint()
         {
@@ -23,6 +24,13 @@ namespace First_OpenTK
             this.coordY = y;
             this.coordZ = z;
             this.pointColor = pColor;
+        }
+        public MyPoint(int x, int y, int z, Color4 pColor)
+        {
+            this.coordX = x;
+            this.coordY = y;
+            this.coordZ = z;
+            this.randomPointColor = pColor;
         }
         public MyPoint(int x, int y, int z)
         {

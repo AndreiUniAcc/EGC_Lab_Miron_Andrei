@@ -20,8 +20,8 @@ namespace First_OpenTK
     class SimpleWindow : GameWindow
     {
         double lastMousePos;
-        bool moveLeft = false, moveRight = false, moveUp = false, moveDown = false;
-        bool mouseClick = false;
+        bool moveLeft = false, moveRight = false, moveUp = false, moveDown = false, mouseClick = false;
+        bool pickRandomCubeColors = false;
         KeyboardState lastKeyPress;
 
 
@@ -43,7 +43,7 @@ namespace First_OpenTK
             GL.Enable(EnableCap.DepthTest);
             GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
 
-            cub = new Cube();
+            cub = new Cube(pickRandomCubeColors);
         }
 
         protected override void OnResize(EventArgs e)
@@ -89,7 +89,7 @@ namespace First_OpenTK
             base.OnRenderFrame(e);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
+                
             cub.DrawCube();
             cub.CubeRotation(e, moveLeft, moveRight, moveUp, moveDown);
 
@@ -136,6 +136,15 @@ namespace First_OpenTK
             if (keyboard[Key.Escape] && !keyboard.Equals(lastKeyPress))
             {
                 this.Exit();
+            }
+
+            if (keyboard[Key.Number1] && !keyboard.Equals(lastKeyPress))
+            {
+                pickRandomCubeColors = true;
+            }
+            if (keyboard[Key.Number2] && !keyboard.Equals(lastKeyPress))
+            {
+                pickRandomCubeColors = false;
             }
 
             if (keyboard[Key.F11] && !keyboard.Equals(lastKeyPress))

@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace First_OpenTK
@@ -35,20 +37,41 @@ namespace First_OpenTK
         }
 
         // Constructor
-        public Cube()
+        public Cube(bool pickRandomColors)
         {
-        
-
+            IsDrawable = true;
+            if (pickRandomColors == false)
+            {
                 A = new MyPoint(1, 1, -1, Color.Green);
                 B = new MyPoint(1, 1, 1, Color.Blue);
-                C = new MyPoint(-1, 1, 1, Color.Pink);
+                C = new MyPoint(-1, 1, 1, Color.Black);
                 D = new MyPoint(-1, 1, -1, Color.Red);
 
                 E = new MyPoint(1, -1, -1, Color.Green);
                 F = new MyPoint(1, -1, 1, Color.Blue);
-                G = new MyPoint(-1, -1, 1, Color.Pink);
+                G = new MyPoint(-1, -1, 1, Color.Black);
                 H = new MyPoint(-1, -1, -1, Color.Red);
-            
+
+            }
+            else
+            {
+                Color4[] randomColors = new Color4[8];
+                var rand = new Random();
+                for (int i = 0; i < 8; i++)
+                {
+                    randomColors[i] = new Color4((float)rand.Next(0, 255), (float)rand.Next(0, 255), (float)rand.Next(0, 255), 1.0f);
+                }
+                A = new MyPoint(1, 1, -1, randomColors[0]);
+                B = new MyPoint(1, 1, 1, randomColors[1]);
+                C = new MyPoint(-1, 1, 1, randomColors[2]);
+                D = new MyPoint(-1, 1, -1, randomColors[3]);
+
+                E = new MyPoint(1, -1, -1, randomColors[4]);
+                F = new MyPoint(1, -1, 1, randomColors[5]);
+                G = new MyPoint(-1, -1, 1, randomColors[6]);
+                H = new MyPoint(-1, -1, -1, randomColors[7]);
+            }
+
         }
 
         // Deseneaza cub daca IsDrawable true.
