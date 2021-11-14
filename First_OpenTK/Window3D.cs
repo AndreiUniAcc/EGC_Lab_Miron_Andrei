@@ -80,17 +80,16 @@ namespace First_OpenTK
                     fb.VisibilityToggle();
                 }
             fb.Falling();
-            //if (fb.onGround() && fb.isVisible())
-            //    fb.VisibilityToggle();
+
             if (mouse[MouseButton.Right])
             {
                 GL.ClearColor(Color.MidnightBlue);
             }
 
 
-        
-        // Camera Movement
-        if (keyboard[Key.Left] && activateCameraMovement)
+
+            #region Camera Movement
+            if (keyboard[Key.Left] && activateCameraMovement)
             cam.MoveLeft();
         if (keyboard[Key.Right] && activateCameraMovement)
             cam.MoveRight();
@@ -98,10 +97,11 @@ namespace First_OpenTK
             cam.MoveUp();
         if (keyboard[Key.Down] && activateCameraMovement)
             cam.MoveDown();
+            #endregion
 
             #region Zoom
 
-        if (keyboard[Key.Up] && activateZoom)
+            if (keyboard[Key.Up] && activateZoom)
             cam.MoveForward();
         if (keyboard[Key.Down] &&  activateZoom)
             cam.MoveBackward();
@@ -130,11 +130,13 @@ namespace First_OpenTK
             #endregion
 
 
+
             if (keyboard[Key.O] && !keyboard.Equals(lastKeyPress))
                 mo.ToggleVisibility();
 
 
             lastClick = mouse;
+            lastKeyPress = keyboard;
         }
 
 

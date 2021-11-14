@@ -31,7 +31,7 @@ namespace First_OpenTK
                     Console.WriteLine("Crearea obiectului a esuat: obiect negasit/coordonate lipsa!");
                     return;
                 }
-                visibility = false;
+                visibility = true;
                 meshColor = col;
                 hasError = false;
                 Console.WriteLine("Obiect 3D Ã®ncarcat - " + coordsList.Count.ToString() + " vertexuri disponibile!");
