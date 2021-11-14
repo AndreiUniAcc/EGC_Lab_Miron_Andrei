@@ -58,6 +58,7 @@
     <Compile Include="Cube.cs" />
     <Compile Include="FallingObj.cs" />
     <Compile Include="Floor.cs" />
+    <Compile Include="MassiveObject.cs" />
     <Compile Include="MyPoint.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="assets\lowpolytree.obj" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -14,6 +14,7 @@ namespace First_OpenTK
         private readonly Color fColorisation;
 
         private bool visibility;
+        private bool floorVisibility;
 
         // CONST
         private readonly Color GRIDCOLOR = Color.WhiteSmoke;
@@ -40,9 +41,24 @@ namespace First_OpenTK
             visibility = false;
         }
 
+        public void ShowF()
+        {
+            floorVisibility = true;
+        }
+
+        public void HideF()
+        {
+            floorVisibility = false;
+        }
+
         public void ToggleVisibility()
         {
             visibility = !visibility;
+        }
+
+        public void ToggleFloor()
+        {
+            floorVisibility = !floorVisibility;
         }
 
         public void DrawGrid()
@@ -64,6 +80,15 @@ namespace First_OpenTK
                 GL.End();
             }
         }
+            public void DrawFloor()
+            {
+                if (floorVisibility)
+                {
+                GL.Begin(PrimitiveType.Quads);
+                GL.Vertex3(-10, 0, 10);
+                }
+            }
+        
     }
 }
 

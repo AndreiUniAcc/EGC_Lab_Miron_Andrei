@@ -24,6 +24,7 @@ namespace First_OpenTK
         private MouseState lastClick;
 
 
+        private MassiveObject mo;
         private Cube cub;
         private Axes axe;
         private FallingObj fb;
@@ -38,6 +39,7 @@ namespace First_OpenTK
             fb = new FallingObj();
             cub = new Cube();
             axe = new Axes();
+            mo = new MassiveObject(Color.Green);
         }
 
 
@@ -109,7 +111,8 @@ namespace First_OpenTK
             farZoom = true;
         }
         else 
-        { 
+        {
+            Vector3 eye = new Vector3(10, 10, 30);
             cam.SetCamera();
             farZoom = false; 
         }
@@ -120,10 +123,16 @@ namespace First_OpenTK
         }
         else
         {
-            cam.SetCamera();
+                Vector3 eye = new Vector3(10, 10, 30);
+                cam.SetCamera();
             closeZoom = false;
         }
             #endregion
+
+
+            if (keyboard[Key.O] && !keyboard.Equals(lastKeyPress))
+                mo.ToggleVisibility();
+
 
             lastClick = mouse;
         }
@@ -139,6 +148,7 @@ namespace First_OpenTK
             axe.Draw();
             
             fb.Draw();
+            mo.Draw();
             SwapBuffers();
         }
 
@@ -174,21 +184,21 @@ namespace First_OpenTK
 
             if (keyboard[Key.M] && !keyboard.Equals(lastKeyPress))
             {
-                Console.Clear();
+                Program.Menu();
                 Console.WriteLine("Object movement is activated.");
                 activateObjectMovement = true;
                 activateZoom = activateCameraMovement = false;
             }
             if (keyboard[Key.C] && !keyboard.Equals(lastKeyPress))
             {
-                Console.Clear();
+                Program.Menu();
                 Console.WriteLine("Camera control Activated.");
                 activateCameraMovement = true;
                 activateZoom = activateObjectMovement = false;
             }
             if (keyboard[Key.Z] && !keyboard.Equals(lastKeyPress))
             {
-                Console.Clear();
+                Program.Menu();
                 Console.WriteLine("Zoom Activated.");
                 activateZoom = true;
                 activateObjectMovement = activateCameraMovement = false;

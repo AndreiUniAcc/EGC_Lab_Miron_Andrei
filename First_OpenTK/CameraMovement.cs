@@ -34,8 +34,13 @@ namespace First_OpenTK
 
         public void SetCamera()
         {
-            eye[2] = 30;
             Matrix4 camera = Matrix4.LookAt(eye, target, up_vector);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadMatrix(ref camera);
+        }
+        public void SetCamera(Vector3 _eye)
+        {
+            Matrix4 camera = Matrix4.LookAt(_eye, target, up_vector);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref camera);
         }
